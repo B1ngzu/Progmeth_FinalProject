@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /c/Users/Acer/Desktop/Progmeth_project2 && ./gradlew compileTestJava test 2>&1)",
+      "Bash(tail:*)",
+      "Bash(grep:*)",
+      "Bash(cd /c/Users/Acer/Desktop/Progmeth_project2 && ./gradlew clean 2>&1 && ./gradlew shadowJar 2>&1)",
+      "Bash(cd:*)",
+      "Bash(cd /c/Users/Acer/Desktop/Progmeth_project2 && ./gradlew clean --no-build-cache 2>&1 && ./gradlew shadowJar --no-build-cache 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\Acer\\\\Desktop\\\\Progmeth_project2\" && ./gradlew compileJava --no-daemon 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\Acer\\\\Desktop\\\\Progmeth_project2\" && ./gradlew test --no-daemon 2>&1)"
+    ]
+  }
+}

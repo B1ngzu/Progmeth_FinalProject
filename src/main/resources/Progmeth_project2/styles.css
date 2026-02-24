@@ -1,0 +1,92 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Memory Match — Global Stylesheet
+   All colours reference the dark-navy game palette.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Root ───────────────────────────────────────────────────────────────── */
+.root {
+    -fx-font-family: 'Segoe UI', 'Arial', sans-serif;
+    -fx-base: #0D1B2A;
+}
+
+/* ── Separator ──────────────────────────────────────────────────────────── */
+.separator .line {
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+}
+
+/* ── ComboBox drop-list ──────────────────────────────────────────────────── */
+.combo-box-popup .list-view {
+    -fx-background-color: #1A3A6B;
+    -fx-border-color: #4A90D9;
+}
+
+.combo-box-popup .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(74, 144, 217, 0.35);
+}
+
+/* ── ScrollBar (leaderboard) ─────────────────────────────────────────────── */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .track {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(74, 144, 217, 0.5);
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+/* ── Alert dialogs ───────────────────────────────────────────────────────── */
+.dialog-pane {
+    -fx-background-color: #1A3A6B;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #0D1B2A;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane .content.label {
+    -fx-text-fill: rgba(255, 255, 255, 0.85);
+    -fx-font-size: 14;
+}
+
+.dialog-pane .button-bar .button {
+    -fx-background-color: linear-gradient(to bottom, #2980B9, #1A6FA8);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+/* ── Tooltip ─────────────────────────────────────────────────────────────── */
+.tooltip {
+    -fx-background-color: #0D1B2A;
+    -fx-text-fill: white;
+    -fx-border-color: #4A90D9;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-size: 13;
+}
+
+/* ── Card theme accent colours ──────────────────────────────────────────── */
+.animal-card-accent  { -fx-text-fill: #A8E6CF; }
+.fruit-card-accent   { -fx-text-fill: #FFD93D; }
+.number-card-accent  { -fx-text-fill: #A0C4FF; }

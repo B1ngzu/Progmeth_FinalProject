@@ -1,0 +1,76 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'Progmeth_project2'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+// Java 24 (Oracle OpenJDK 24.0.2)
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+    }
+}
+
+// JavaFX 24 modules
+javafx {
+    version = '24'
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.swing']
+}
+
+// Main class configuration
+// Launcher is used as the JVM entry point so the shadow JAR bypasses the
+// JavaFX module-system restriction on directly launching Application subclasses.
+application {
+    mainClass = 'Progmeth_project2.Launcher'
+}
+
+dependencies {
+    // JUnit 5
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// Test configuration
+tasks.named('test') {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        showStandardStreams = true
+    }
+}
+
+// Fat JAR configuration (shadow)
+// Uses Launcher (not Main) as entry point to satisfy JavaFX module restrictions
+shadowJar {
+    archiveBaseName.set('Progmeth_project2')
+    archiveClassifier.set('')
+    archiveVersion.set('1.0')
+    manifest {
+        attributes(
+                'Main-Class': 'Progmeth_project2.Launcher'
+        )
+    }
+    mergeServiceFiles()
+}
+
+// Ensure resources are included
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+// Run task JVM args for JavaFX
+run {
+    jvmArgs = [
+            '--add-modules', 'javafx.controls,javafx.fxml,javafx.media,javafx.swing',
+            '--add-exports', 'javafx.graphics/com.sun.javafx.sg.prism=ALL-UNNAMED'
+    ]
+}
