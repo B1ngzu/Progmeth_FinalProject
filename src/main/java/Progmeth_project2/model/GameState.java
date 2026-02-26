@@ -127,6 +127,7 @@ public class GameState implements Resetable {
             case ANIMALS -> new AnimalCard(cardId, symbolKey);
             case FRUITS  -> new FruitCard(cardId, symbolKey);
             case NUMBERS -> new NumberCard(cardId, symbolKey);
+            case ANIME -> new AnimeCard(cardId, symbolKey);
         };
     }
 

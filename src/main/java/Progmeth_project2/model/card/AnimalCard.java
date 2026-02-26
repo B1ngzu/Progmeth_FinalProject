@@ -1,13 +1,6 @@
 package Progmeth_project2.model.card;
 
-/**
- * A card whose face displays an animal emoji symbol.
- *
- * <p>Demonstrates polymorphism: stored in {@code List<BaseCard>} collections
- * alongside {@link FruitCard} and {@link NumberCard}; callers invoke
- * {@link #getDisplaySymbol()} and {@link #getScore()} through the base-class
- * reference without knowing the concrete type.</p>
- */
+
 public class AnimalCard extends BaseCard {
 
     /** CSS style-class applied to the card face for the Animals theme. */

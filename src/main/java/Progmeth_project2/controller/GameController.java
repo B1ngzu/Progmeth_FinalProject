@@ -16,6 +16,12 @@ import javafx.geometry.Bounds;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +73,6 @@ public class GameController {
      * @param stage      the application stage
      * @param gameState  the current game state
      * @param gameScene  the game view
-     * @param playerName the player's display name (for leaderboard)
      */
     public GameController(Stage stage, GameState gameState,
                           GameScene gameScene, String playerName) {
@@ -86,6 +91,8 @@ public class GameController {
     public void start() {
         gameScene.updateHud();
         startTimer();
+        SoundManager.getInstance().startBackgroundMusic();
+
     }
 
     // ── Card click handler ────────────────────────────────────────────────────
@@ -156,16 +163,56 @@ public class GameController {
      */
     public void onMenuRequested() {
         stopTimer();
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Return to Menu");
-        confirm.setHeaderText("Quit this game?");
-        confirm.setContentText("Your current score will be lost.");
-        Optional<ButtonType> result = confirm.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            navigateToMenu();
-        } else {
+
+        Stage dialog = new Stage();
+        dialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        dialog.initOwner(stage);
+        dialog.initStyle(javafx.stage.StageStyle.TRANSPARENT);
+        dialog.setTitle("Return to Menu");
+
+        Label title = new Label("Quit this game?");
+        title.setStyle("-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        Label sub = new Label("Your current score will be lost.");
+        sub.setStyle("-fx-font-size: 13; -fx-text-fill: rgba(255,255,255,0.7);");
+
+        Button cancelBtn = new Button("Cancel");
+        cancelBtn.setPrefWidth(120);
+        cancelBtn.setStyle(
+                "-fx-background-color: #4A4A6A; -fx-text-fill: white;"
+                        + "-fx-font-size: 14; -fx-background-radius: 12; -fx-cursor: hand;"
+        );
+
+        Button okBtn = new Button("Quit");
+        okBtn.setPrefWidth(120);
+        okBtn.setStyle(
+                "-fx-background-color: linear-gradient(to bottom, #C0392B, #A93226);"
+                        + "-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;"
+                        + "-fx-background-radius: 12; -fx-cursor: hand;"
+        );
+
+        cancelBtn.setOnAction(e -> {
+            dialog.close();
             startTimer();
-        }
+        });
+
+        okBtn.setOnAction(e -> {
+            dialog.close();
+            navigateToMenu();
+        });
+
+        HBox buttons = new HBox(16, cancelBtn, okBtn);
+        buttons.setAlignment(javafx.geometry.Pos.CENTER);
+
+        VBox layout = new VBox(16, title, sub, buttons);
+        layout.setAlignment(javafx.geometry.Pos.CENTER);
+        layout.setPadding(new javafx.geometry.Insets(30));
+        layout.setStyle("-fx-background-color: #1A2A3A; -fx-background-radius: 16;");
+
+        javafx.scene.Scene s = new javafx.scene.Scene(layout, 320, 180);
+        s.setFill(javafx.scene.paint.Color.TRANSPARENT);
+        dialog.setScene(s);
+        dialog.show();
     }
 
     // ── Private: pair evaluation ───────────────────────────────────────────────
@@ -298,9 +345,6 @@ public class GameController {
 
         // Persist score before showing the dialog so it is saved even if the
         // user force-closes the window.
-        LeaderboardController lbCtrl = new LeaderboardController(stage);
-        lbCtrl.addScore(playerName, finalScore,
-                gameState.getDifficulty(), gameState.getLevel());
 
         Alert dialog = new Alert(Alert.AlertType.NONE);
         dialog.setTitle("Game Over");
@@ -437,6 +481,7 @@ public class GameController {
 
     private void navigateToMenu() {
         stopTimer();
+        SoundManager.getInstance().stopBackgroundMusic();
         MenuController menuCtrl = new MenuController(stage);
         menuCtrl.showMenu();
     }

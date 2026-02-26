@@ -24,6 +24,7 @@ public class SettingsScene extends BaseScene {
     // ── Controller ────────────────────────────────────────────────────────────
 
     private final MenuController controller;
+    private ToggleButton bgmToggle;
 
     // ── UI nodes ─────────────────────────────────────────────────────────────
 
@@ -86,6 +87,23 @@ public class SettingsScene extends BaseScene {
           + "-fx-accent: #2980B9;"
         );
 
+        // BGM toggle row
+        Label bgmLabel = new Label("Background Music");
+        bgmLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18;");
+
+        bgmToggle = new ToggleButton(SoundManager.getInstance().isBgMuted() ? "OFF" : "ON");
+        bgmToggle.setSelected(!SoundManager.getInstance().isBgMuted());
+        styleBgmToggle();
+
+        Region bgmSpacer = new Region();
+        HBox.setHgrow(bgmSpacer, Priority.ALWAYS);
+        HBox bgmRow = new HBox(20, bgmLabel, bgmSpacer, bgmToggle);
+        bgmRow.setAlignment(Pos.CENTER);
+        bgmRow.setPadding(new Insets(16));
+        bgmRow.setMaxWidth(500);
+        bgmRow.setStyle("-fx-background-color: rgba(255,255,255,0.07);"
+                + "-fx-background-radius: 12;");
+
         Label sfxPctLabel = new Label(Math.round(SoundManager.getInstance().getSfxVolume() * 100) + "%");
         sfxPctLabel.setStyle("-fx-text-fill: #A0C4FF; -fx-font-size: 14; -fx-font-weight: bold;"
                 + "-fx-min-width: 40;");
@@ -133,7 +151,7 @@ public class SettingsScene extends BaseScene {
           + "-fx-background-radius: 22; -fx-cursor: hand;"
         );
 
-        root.getChildren().addAll(title, soundRow, sfxRow,
+        root.getChildren().addAll(title, soundRow, bgmRow, sfxRow,
                 instrTitle, instructions, fullscreenHint, backButton);
 
         // No explicit width/height — see MainMenuScene for rationale.
@@ -163,6 +181,13 @@ public class SettingsScene extends BaseScene {
             }
         });
 
+        bgmToggle.setOnAction(e -> {
+            boolean muted = !bgmToggle.isSelected();
+            SoundManager.getInstance().setBgMuted(muted);
+            bgmToggle.setText(muted ? "OFF" : "ON");
+            styleBgmToggle();
+        });
+
         backButton.setOnAction(e -> controller.onBack());
     }
 
@@ -175,6 +200,16 @@ public class SettingsScene extends BaseScene {
           + "-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;"
           + "-fx-background-radius: 20; -fx-pref-width: 70; -fx-pref-height: 36;"
           + "-fx-cursor: hand;"
+        );
+    }
+
+    private void styleBgmToggle() {
+        boolean on = bgmToggle.isSelected();
+        bgmToggle.setStyle(
+                "-fx-background-color: " + (on ? "#27AE60" : "#C0392B") + ";"
+                        + "-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;"
+                        + "-fx-background-radius: 20; -fx-pref-width: 70; -fx-pref-height: 36;"
+                        + "-fx-cursor: hand;"
         );
     }
 }

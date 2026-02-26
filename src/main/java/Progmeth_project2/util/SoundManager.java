@@ -20,6 +20,55 @@ public class SoundManager {
     // ── Singleton ─────────────────────────────────────────────────────────────
 
     private static SoundManager instance;
+    private Clip bgClip;
+    private volatile boolean bgPlaying = false;
+    private boolean bgMuted = false;
+
+
+    public void setBgMuted(boolean muted) {
+        this.bgMuted = muted;
+        if (bgClip != null) {
+            if (muted) {
+                bgClip.stop();
+            } else {
+                bgClip.loop(Clip.LOOP_CONTINUOUSLY);
+                bgClip.start();
+            }
+        }
+    }
+
+    public boolean isBgMuted() {
+        return bgMuted;
+    }
+
+    public void startBackgroundMusic() {
+        if (bgPlaying) return;
+        bgPlaying = true;
+        executor.submit(() -> {
+            try {
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(
+                        getClass().getResource("/sounds/01.wav")
+                );
+                bgClip = AudioSystem.getClip();
+                bgClip.open(audioIn);  // ต้อง open ก่อนเสมอ
+
+                if (!bgMuted) {        // แล้วค่อยเช็ค muted
+                    bgClip.loop(Clip.LOOP_CONTINUOUSLY);
+                    bgClip.start();
+                }
+            } catch (Exception e) {
+                System.err.println("BGM load failed: " + e.getMessage());
+            }
+        });
+    }
+
+    public void stopBackgroundMusic() {
+        bgPlaying = false;
+        if (bgClip != null) {
+            bgClip.stop();
+            bgClip.close();
+        }
+    }
 
     /** Returns the application-wide {@code SoundManager} singleton. */
     public static SoundManager getInstance() {
@@ -42,7 +91,7 @@ public class SoundManager {
     private boolean muted = false;
 
     /** Master SFX volume in [0.0, 1.0]. Default 0.8. */
-    private float sfxVolume = 0.8f;
+    private float sfxVolume = 0.5f;
 
     // ── Constructor ──────────────────────────────────────────────────────────
 

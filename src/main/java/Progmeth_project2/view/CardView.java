@@ -36,6 +36,7 @@ public class CardView extends StackPane {
 
     private final Label symbolLabel;
     private final Label backLabel;
+    private javafx.scene.image.ImageView symbolView;
 
     // ── Constructor ──────────────────────────────────────────────────────────
 
@@ -59,12 +60,31 @@ public class CardView extends StackPane {
         backLabel = new Label("?");
         backLabel.setStyle(buildBackLabelStyle());
 
-        // Front face label (symbol)
-        symbolLabel = new Label(model.getDisplaySymbol());
-        symbolLabel.setStyle(buildSymbolLabelStyle());
-        symbolLabel.setVisible(false);
+        // Front face — เช็คว่าเป็น path รูปหรือ emoji/ตัวเลข
+        String symbol = model.getDisplaySymbol();
 
-        getChildren().addAll(backLabel, symbolLabel);
+        if (symbol.startsWith("/images/")) {
+            // เป็น path รูป → ใช้ ImageView
+            javafx.scene.image.Image img = new javafx.scene.image.Image(
+                    getClass().getResourceAsStream(symbol)
+            );
+            symbolView = new javafx.scene.image.ImageView(img);
+            symbolView.setFitWidth(80);
+            symbolView.setFitHeight(80);
+            symbolView.setPreserveRatio(true);
+            symbolView.setVisible(false);
+            StackPane.setAlignment(symbolView, Pos.CENTER);
+            symbolLabel = new Label("");
+            getChildren().addAll(backLabel, symbolView);
+        } else {
+            // เป็น emoji หรือตัวเลข → ใช้ Label เหมือนเดิม
+            symbolLabel = new Label(symbol);
+            symbolLabel.setStyle(buildSymbolLabelStyle());
+            symbolLabel.setVisible(false);
+            symbolView = null;
+            getChildren().addAll(backLabel, symbolLabel);
+        }
+
         applyBaseStyle(false);
     }
 
@@ -77,7 +97,8 @@ public class CardView extends StackPane {
     public void showFront() {
         showingFront = true;
         backLabel.setVisible(false);
-        symbolLabel.setVisible(true);
+        if (symbolView != null) symbolView.setVisible(true);
+        else symbolLabel.setVisible(true);
         applyBaseStyle(true);
     }
 
@@ -88,7 +109,8 @@ public class CardView extends StackPane {
     public void showBack() {
         showingFront = false;
         backLabel.setVisible(true);
-        symbolLabel.setVisible(false);
+        if (symbolView != null) symbolView.setVisible(false);
+        else symbolLabel.setVisible(false);
         applyBaseStyle(false);
     }
 

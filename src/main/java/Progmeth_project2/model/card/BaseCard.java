@@ -12,7 +12,7 @@ import Progmeth_project2.interfaces.Scoreable;
  * {@link Resetable} (cards can be reset between levels).</p>
  *
  * <p>Concrete subclasses ({@link AnimalCard}, {@link FruitCard},
- * {@link NumberCard}) must supply a display symbol via {@link #getDisplaySymbol()}
+ * {@link NumberCard}),({@link AnimalCard} must supply a display symbol via {@link #getDisplaySymbol()}
  * and may override {@link #getScore()} to differentiate point values.</p>
  */
 public abstract class BaseCard implements Flippable, Scoreable, Resetable {

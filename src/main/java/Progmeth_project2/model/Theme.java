@@ -26,6 +26,29 @@ public enum Theme {
         "1",  "2",  "3",  "4",  "5",  "6",
         "7",  "8",  "9",  "10", "11", "12",
         "13", "14", "15", "16", "17", "18"
+    }),
+
+    /** Anime theme -18 unique char. */
+    ANIME("Anime", new String[]{
+                "/images/asuka-removebg-preview.png",
+                "/images/asuka-removebg-preview.png",
+                "/images/chinatsu-removebg-preview.png",
+                "/images/elysia-removebg-preview.png",
+                "/images/frieren-removebg-preview.png",
+                "/images/gojo-removebg-preview.png",
+                "/images/heero-removebg-preview.png",
+                "/images/kaguya-removebg-preview.png",
+                "/images/lena-removebg-preview.png",
+                "/images/mai-removebg-preview.png",
+                "/images/mikasa-removebg-preview.png",
+                "/images/nesekoi-removebg-preview.png",
+                "/images/punpun-removebg-preview.png",
+                "/images/reiji-removebg-preview.png",
+                "/images/reze-removebg-preview.png",
+                "/images/ruby-removebg-preview.png",
+                "/images/sasuke-removebg-preview.png",
+                "/images/waguri-removebg-preview.png",
+                "/images/yukino-removebg-preview.png"
     });
 
     // ── Fields ──────────────────────────────────────────────────────────────

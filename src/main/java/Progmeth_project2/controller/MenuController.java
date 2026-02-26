@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 /**
  * Controller for the main-menu and settings scenes.
  *
- * <p>Handles navigation between the main menu, game scene, leaderboard, and
+ * <p>Handles navigation between the main menu, game scene, and
  * settings.  Wires up each scene's view with the appropriate controller before
  * calling {@link BaseScene#show()}.</p>
  */
@@ -63,13 +63,8 @@ public class MenuController {
         gameCtrl.start();
     }
 
-    /**
-     * Called when the player clicks "Leaderboard".
-     */
-    public void onLeaderboard() {
-        LeaderboardController lbCtrl = new LeaderboardController(stage);
-        lbCtrl.show();
-    }
+
+
 
     /**
      * Called when the player clicks "Settings".
@@ -81,7 +76,7 @@ public class MenuController {
 
     /**
      * Called when the player clicks "Back" in any scene that delegates back to
-     * the menu (settings, leaderboard).
+
      */
     public void onBack() {
         showMenu();

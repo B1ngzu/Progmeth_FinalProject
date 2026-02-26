@@ -28,7 +28,6 @@ public class MainMenuScene extends BaseScene {
     private ComboBox<Difficulty> difficultyBox;
     private ComboBox<Theme>      themeBox;
     private Button playButton;
-    private Button leaderboardButton;
     private Button settingsButton;
     private Button exitButton;
     private Label  playerNameLabel;
@@ -81,7 +80,7 @@ public class MainMenuScene extends BaseScene {
         diffLabel.setStyle("-fx-text-fill: #BDC3C7; -fx-font-size: 14;");
         difficultyBox = new ComboBox<>();
         difficultyBox.getItems().addAll(Difficulty.values());
-        difficultyBox.setValue(Difficulty.EASY);
+        difficultyBox.setValue(Difficulty.HARD);
         styleComboBox(difficultyBox);
 
         // Theme selection
@@ -89,7 +88,7 @@ public class MainMenuScene extends BaseScene {
         themeLabel.setStyle("-fx-text-fill: #BDC3C7; -fx-font-size: 14;");
         themeBox = new ComboBox<>();
         themeBox.getItems().addAll(Theme.values());
-        themeBox.setValue(Theme.ANIMALS);
+        themeBox.setValue(Theme.ANIME);
         styleComboBox(themeBox);
 
         // Difficulty / theme row
@@ -100,12 +99,11 @@ public class MainMenuScene extends BaseScene {
 
         // Buttons
         playButton = createMenuButton("▶  Play Game", "#27AE60", "#1E8449");
-        leaderboardButton = createMenuButton("🏆  Leaderboard", "#2980B9", "#1A6FA8");
         settingsButton = createMenuButton("⚙  Settings", "#7D3C98", "#6C3483");
         exitButton = createMenuButton("✕  Exit", "#C0392B", "#A93226");
 
         VBox buttons = new VBox(12,
-                playButton, leaderboardButton, settingsButton, exitButton);
+                playButton, settingsButton, exitButton);
         buttons.setAlignment(Pos.CENTER);
 
         // Difficulty info
@@ -135,7 +133,6 @@ public class MainMenuScene extends BaseScene {
                 difficultyBox.getValue(),
                 themeBox.getValue()));
 
-        leaderboardButton.setOnAction(e -> controller.onLeaderboard());
         settingsButton.setOnAction(e -> controller.onSettings());
         exitButton.setOnAction(e -> controller.onExit());
     }
