@@ -6,81 +6,18 @@ import java.util.concurrent.Executors;
 
 /**
  * Singleton that synthesises and plays all in-game sounds programmatically
- * using {@code javax.sound.sampled}.  No audio files are required.
+ * using {@code javax.sound.sampled}.  No audio files are required for SFX.
  *
  * <p>All sound playback is dispatched to a shared daemon-thread executor so
  * that the JavaFX Application Thread is never blocked.</p>
- *
- * <p>Sound generation uses a simple additive-synthesis approach: a base sine
- * wave with an amplitude envelope is written to an in-memory byte buffer and
- * played via a {@link Clip}.</p>
  */
 public class SoundManager {
 
-    // ── Singleton ─────────────────────────────────────────────────────────────
-
-    private static SoundManager instance;
-    private Clip bgClip;
-    private volatile boolean bgPlaying = false;
-    private boolean bgMuted = false;
-
-
-    public void setBgMuted(boolean muted) {
-        this.bgMuted = muted;
-        if (bgClip != null) {
-            if (muted) {
-                bgClip.stop();
-            } else {
-                bgClip.loop(Clip.LOOP_CONTINUOUSLY);
-                bgClip.start();
-            }
-        }
-    }
-
-    public boolean isBgMuted() {
-        return bgMuted;
-    }
-
-    public void startBackgroundMusic() {
-        if (bgPlaying) return;
-        bgPlaying = true;
-        executor.submit(() -> {
-            try {
-                AudioInputStream audioIn = AudioSystem.getAudioInputStream(
-                        getClass().getResource("/sounds/01.wav")
-                );
-                bgClip = AudioSystem.getClip();
-                bgClip.open(audioIn);  // ต้อง open ก่อนเสมอ
-
-                if (!bgMuted) {        // แล้วค่อยเช็ค muted
-                    bgClip.loop(Clip.LOOP_CONTINUOUSLY);
-                    bgClip.start();
-                }
-            } catch (Exception e) {
-                System.err.println("BGM load failed: " + e.getMessage());
-            }
-        });
-    }
-
-    public void stopBackgroundMusic() {
-        bgPlaying = false;
-        if (bgClip != null) {
-            bgClip.stop();
-            bgClip.close();
-        }
-    }
-
-    /** Returns the application-wide {@code SoundManager} singleton. */
-    public static SoundManager getInstance() {
-        if (instance == null) {
-            instance = new SoundManager();
-        }
-        return instance;
-    }
-
-    // ── Fields ──────────────────────────────────────────────────────────────
+    // Field
 
     private static final int SAMPLE_RATE = 44100;
+    private static SoundManager instance;
+
     private final ExecutorService executor =
             Executors.newCachedThreadPool(r -> {
                 Thread t = new Thread(r, "SoundManager");
@@ -88,16 +25,35 @@ public class SoundManager {
                 return t;
             });
 
-    private boolean muted = false;
+        // SFX
+    private boolean muted     = false;
+    private float   sfxVolume = 0.5f;
 
-    /** Master SFX volume in [0.0, 1.0]. Default 0.8. */
-    private float sfxVolume = 0.5f;
+        // BGM
+    private Clip    bgClip    = null;
+    private volatile boolean bgPlaying = false;
+    private boolean bgMuted   = false;
+    private float   bgVolume  = 0.5f;
 
     // ── Constructor ──────────────────────────────────────────────────────────
 
     private SoundManager() {}
 
-    // ── Public sound API ─────────────────────────────────────────────────────
+    // ── Singleton accessor ────────────────────────────────────────────────────
+
+    /**
+     * Returns the application-wide {@code SoundManager} singleton.
+     *
+     * @return singleton instance
+     */
+    public static SoundManager getInstance() {
+        if (instance == null) {
+            instance = new SoundManager();
+        }
+        return instance;
+    }
+
+    // ── Methods ───────────────────────────────────────────────────────────────
 
     /**
      * Plays a short "tick" sound for a card flip action.
@@ -188,17 +144,60 @@ public class SoundManager {
         });
     }
 
+
+
     /**
-     * Toggles the muted state.
+     * Starts background music from /sounds/01.wav (loops continuously).
+     */
+    public void startBackgroundMusic() {
+        if (bgPlaying) return;
+        bgPlaying = true;
+        executor.submit(() -> {
+            try {
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(
+                        getClass().getResource("/sounds/01.wav")
+                );
+                bgClip = AudioSystem.getClip();
+                bgClip.open(audioIn);
+
+                // Apply initial volume
+                applyBgGain();
+
+                if (!bgMuted) {
+                    bgClip.loop(Clip.LOOP_CONTINUOUSLY);
+                    bgClip.start();
+                }
+            } catch (Exception e) {
+                System.err.println("BGM load failed: " + e.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Stops and closes the background music clip.
+     */
+    public void stopBackgroundMusic() {
+        bgPlaying = false;
+        if (bgClip != null) {
+            bgClip.stop();
+            bgClip.close();
+            bgClip = null;
+        }
+    }
+
+
+
+    /**
+     * Sets the SFX muted state.
      *
-     * @param muted {@code true} to silence all sounds
+     * @param muted {@code true} to silence all SFX
      */
     public void setMuted(boolean muted) {
         this.muted = muted;
     }
 
     /**
-     * Returns whether sound is currently muted.
+     * Returns whether SFX is currently muted.
      *
      * @return muted flag
      */
@@ -207,9 +206,9 @@ public class SoundManager {
     }
 
     /**
-     * Sets the master SFX volume.  Changes take effect on the next sound played.
+     * Sets the master SFX volume.
      *
-     * @param volume value in [0.0, 1.0]; clamped automatically
+     * @param volume value in [0.0, 1.0]
      */
     public void setSfxVolume(float volume) {
         this.sfxVolume = Math.max(0.0f, Math.min(1.0f, volume));
@@ -224,7 +223,68 @@ public class SoundManager {
         return sfxVolume;
     }
 
-    // ── Core synthesis ────────────────────────────────────────────────────────
+    /**
+     * Sets the BGM muted state.
+     *
+     * @param muted {@code true} to silence background music
+     */
+    public void setBgMuted(boolean muted) {
+        this.bgMuted = muted;
+        if (bgClip != null) {
+            if (muted) {
+                bgClip.stop();
+            } else {
+                bgClip.loop(Clip.LOOP_CONTINUOUSLY);
+                bgClip.start();
+            }
+        }
+    }
+
+    /**
+     * Returns whether BGM is currently muted.
+     *
+     * @return bgMuted flag
+     */
+    public boolean isBgMuted() {
+        return bgMuted;
+    }
+
+    /**
+     * Sets the BGM volume level.
+     *
+     * @param volume value in [0.0, 1.0]
+     */
+    public void setBgVolume(float volume) {
+        this.bgVolume = Math.max(0.0f, Math.min(1.0f, volume));
+        applyBgGain();
+    }
+
+    /**
+     * Returns the current BGM volume level.
+     *
+     * @return value in [0.0, 1.0]
+     */
+    public float getBgVolume() {
+        return bgVolume;
+    }
+
+
+
+    /**
+     * Applies the current bgVolume to the bgClip via MASTER_GAIN FloatControl.
+     */
+    private void applyBgGain() {
+        if (bgClip == null || !bgClip.isOpen()) return;
+        try {
+            FloatControl gain = (FloatControl) bgClip.getControl(FloatControl.Type.MASTER_GAIN);
+            float dB = bgVolume <= 0.0001f
+                    ? gain.getMinimum()
+                    : (float) (Math.log10(bgVolume) * 20);
+            gain.setValue(Math.max(gain.getMinimum(), Math.min(gain.getMaximum(), dB)));
+        } catch (IllegalArgumentException e) {
+            System.err.println("Volume control not supported: " + e.getMessage());
+        }
+    }
 
     /**
      * Waveform shapes available for tone synthesis.
@@ -233,11 +293,6 @@ public class SoundManager {
 
     /**
      * Synthesises and immediately plays a single tone.
-     *
-     * @param frequency  fundamental frequency in Hz
-     * @param durationMs playback duration in milliseconds
-     * @param volume     amplitude in [0.0, 1.0]
-     * @param waveform   waveform shape
      */
     private void playTone(double frequency, int durationMs, float volume, Waveform waveform) {
         try {
@@ -249,31 +304,21 @@ public class SoundManager {
             Clip clip = (Clip) AudioSystem.getLine(info);
             clip.open(format, data, 0, data.length);
             clip.addLineListener(ev -> {
-                if (ev.getType() == LineEvent.Type.STOP) {
-                    clip.close();
-                }
+                if (ev.getType() == LineEvent.Type.STOP) clip.close();
             });
             clip.start();
-        } catch (Exception ignored) {
-            // Silently degrade if audio system is unavailable
-        }
+        } catch (Exception ignored) {}
     }
 
     /**
-     * Generates a byte array of PCM audio samples for the given tone parameters.
-     *
-     * @param frequency  fundamental frequency in Hz
-     * @param durationMs duration in milliseconds
-     * @param volume     peak amplitude [0.0, 1.0]
-     * @param waveform   synthesis waveform
-     * @return signed 8-bit mono PCM data at {@value #SAMPLE_RATE} Hz
+     * Generates PCM audio samples for the given tone parameters.
      */
     private byte[] synthesise(double frequency, int durationMs, float volume, Waveform waveform) {
         int totalSamples = SAMPLE_RATE * durationMs / 1000;
         byte[] data = new byte[totalSamples];
 
-        double attackSamples  = SAMPLE_RATE * 0.005; // 5 ms attack
-        double releaseSamples = SAMPLE_RATE * 0.05;  // 50 ms release
+        double attackSamples  = SAMPLE_RATE * 0.005;
+        double releaseSamples = SAMPLE_RATE * 0.05;
 
         for (int i = 0; i < totalSamples; i++) {
             double t = (double) i / SAMPLE_RATE;
@@ -283,7 +328,6 @@ public class SoundManager {
                 case SAWTOOTH -> 2.0 * (frequency * t - Math.floor(0.5 + frequency * t));
             };
 
-            // Envelope: linear attack and release to avoid clicks
             double env = 1.0;
             if (i < attackSamples) {
                 env = i / attackSamples;

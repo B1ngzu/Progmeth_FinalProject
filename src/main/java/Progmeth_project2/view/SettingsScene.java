@@ -24,13 +24,14 @@ public class SettingsScene extends BaseScene {
     // ── Controller ────────────────────────────────────────────────────────────
 
     private final MenuController controller;
-    private ToggleButton bgmToggle;
 
     // ── UI nodes ─────────────────────────────────────────────────────────────
 
+    private ToggleButton bgmToggle;
     private ToggleButton soundToggle;
     private Slider sfxVolumeSlider;
     private Button backButton;
+    private Slider bgmVolumeSlider;
 
     // ── Constructor ──────────────────────────────────────────────────────────
 
@@ -115,6 +116,29 @@ public class SettingsScene extends BaseScene {
         sfxRow.setStyle("-fx-background-color: rgba(255,255,255,0.07);"
                 + "-fx-background-radius: 12;");
 
+        //bmg slider
+        // BGM volume row
+        Label bgmVolLabel = new Label("BGM Volume");
+        bgmVolLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18;");
+
+        bgmVolumeSlider = new Slider(0.0, 1.0, SoundManager.getInstance().getBgVolume());
+        bgmVolumeSlider.setPrefWidth(240);
+        bgmVolumeSlider.setStyle(
+                "-fx-control-inner-background: #1A3A6B;"
+                        + "-fx-accent: #27AE60;"
+        );
+
+        Label bgmPctLabel = new Label(Math.round(SoundManager.getInstance().getBgVolume() * 100) + "%");
+        bgmPctLabel.setStyle("-fx-text-fill: #A0C4FF; -fx-font-size: 14; -fx-font-weight: bold;"
+                + "-fx-min-width: 40;");
+
+        HBox bgmVolRow = new HBox(20, bgmVolLabel, bgmVolumeSlider, bgmPctLabel);
+        bgmVolRow.setAlignment(Pos.CENTER);
+        bgmVolRow.setPadding(new Insets(16));
+        bgmVolRow.setMaxWidth(500);
+        bgmVolRow.setStyle("-fx-background-color: rgba(255,255,255,0.07);"
+                + "-fx-background-radius: 12;");
+
         // Fullscreen hint row
         Label fullscreenHint = new Label("Press F11 to toggle fullscreen");
         fullscreenHint.setStyle("-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 13;");
@@ -151,7 +175,7 @@ public class SettingsScene extends BaseScene {
           + "-fx-background-radius: 22; -fx-cursor: hand;"
         );
 
-        root.getChildren().addAll(title, soundRow, bgmRow, sfxRow,
+        root.getChildren().addAll(title, soundRow, bgmRow, bgmVolRow ,sfxRow,
                 instrTitle, instructions, fullscreenHint, backButton);
 
         // No explicit width/height — see MainMenuScene for rationale.
@@ -189,6 +213,16 @@ public class SettingsScene extends BaseScene {
         });
 
         backButton.setOnAction(e -> controller.onBack());
+
+        bgmVolumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            float v = newVal.floatValue();
+            SoundManager.getInstance().setBgVolume(v);
+            HBox row = (HBox) bgmVolumeSlider.getParent();
+            if (row != null && row.getChildren().size() >= 3) {
+                Label pct = (Label) row.getChildren().get(2);
+                pct.setText(Math.round(v * 100) + "%");
+            }
+        });
     }
 
     // ── Private helpers ───────────────────────────────────────────────────────
