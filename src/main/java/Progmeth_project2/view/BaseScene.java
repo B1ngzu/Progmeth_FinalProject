@@ -10,7 +10,7 @@ import javafx.stage.Stage;
  * Abstract base class for every full-window scene in the Memory Match game.
  *
  * <p>Each concrete subclass ({@link MainMenuScene}, {@link GameScene},
- * {@link LeaderboardScene}, {@link SettingsScene}) is responsible for building
+ * {@link SettingsScene}) is responsible for building
  * its own layout and event bindings.  The lifecycle is:</p>
  * <ol>
  *   <li>{@link #setupLayout()} — create and arrange all UI nodes; must set
@@ -71,31 +71,25 @@ public abstract class BaseScene {
     /**
      * Initialises the scene ({@link #setupLayout()} then {@link #bindEvents()})
      * and displays it on the stage.
+     *
+     * <p>On the first call, sets a new {@link Scene} on the stage. On subsequent
+     * calls, swaps only the scene root into the existing scene to preserve the
+     * window's maximized/size state.</p>
      */
-    // ── Lifecycle ─────────────────────────────────────────────────────────────
-
-    // ── Lifecycle ─────────────────────────────────────────────────────────────
-
     public void show() {
-        setupLayout(); // สร้าง Scene ใหม่พร้อม Root
+        setupLayout();
 
         Scene currentScene = stage.getScene();
         boolean isFirstTimeScene = (currentScene == null);
 
         if (!isFirstTimeScene) {
-            // 1. ดึง Root ตัวใหม่ออกมา
+            // Detach the new root from its temporary scene and attach it to the
+            // existing scene so the OS window size is never touched.
             javafx.scene.Parent newRoot = this.scene.getRoot();
-
-            // 2. ปลดล็อค Root ออกจาก Scene ใหม่
             this.scene.setRoot(new javafx.scene.layout.Pane());
-
-            // 3. เอา Root ไปเสียบใส่ Scene เดิมที่แสดงอยู่ (วิธีนี้รักษาขนาดหน้าต่างเดิมเป๊ะๆ)
             currentScene.setRoot(newRoot);
-
-            // 4. อัปเดต this.scene ให้ชี้ไปที่ Scene ที่ทำงานอยู่
             this.scene = currentScene;
         } else {
-            // รันครั้งแรกสุด
             stage.setScene(this.scene);
         }
 
@@ -107,8 +101,6 @@ public abstract class BaseScene {
         }
 
         stage.show();
-
-        // ❌ ลบโค้ด if (!stage.isFullScreen()) ที่บังคับ setMaximized ออกไปเลยครับ ❌
     }
 
     /**

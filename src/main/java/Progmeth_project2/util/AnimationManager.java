@@ -20,7 +20,11 @@ public final class AnimationManager {
 
     private static final AnimationManager INSTANCE = new AnimationManager();
 
-    /** Returns the application-wide {@code AnimationManager} singleton. */
+    /**
+     * Returns the application-wide {@code AnimationManager} singleton.
+     *
+     * @return singleton instance
+     */
     public static AnimationManager getInstance() { return INSTANCE; }
 
     private AnimationManager() {}

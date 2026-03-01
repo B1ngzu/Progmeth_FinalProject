@@ -6,22 +6,14 @@ import javafx.util.Duration;
 
 /**
  * Abstract base class for all visual effects in the Memory Match game.
- *
- * <p>Subclasses ({@link FlipEffect}, {@link MatchEffect}, {@link ComboEffect})
- * encapsulate the construction of a JavaFX {@link Animation} for a given target
- * node, keeping animation-creation logic separate from the view layer and
- * enabling polymorphic effect dispatch through {@code List<BaseEffect>}.</p>
- *
- * <p>Each subclass implements {@link #createAnimation(Node)} to return the
- * specific transition or timeline for that effect.  Callers use
- * {@link #play(Node)} as a convenience wrapper.</p>
  */
 public abstract class BaseEffect {
 
     /** Total wall-clock duration of this effect. */
     protected Duration duration;
 
-    // ── Abstract contract ────────────────────────────────────────────────────
+    /** Default constructor for subclass use. */
+    protected BaseEffect() {}
 
     /**
      * Constructs and returns the JavaFX {@link Animation} that implements this

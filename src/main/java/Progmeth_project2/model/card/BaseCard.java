@@ -4,16 +4,13 @@ import Progmeth_project2.interfaces.Flippable;
 import Progmeth_project2.interfaces.Resetable;
 import Progmeth_project2.interfaces.Scoreable;
 
+
 /**
- * Abstract base for all card types in the Memory Match game.
+ * Abstract base class for all card types in the Memory Match game.
  *
- * <p>Implements {@link Flippable} (cards can be flipped face-up / face-down),
- * {@link Scoreable} (each matched pair contributes points), and
- * {@link Resetable} (cards can be reset between levels).</p>
- *
- * <p>Concrete subclasses ({@link AnimalCard}, {@link FruitCard},
- * {@link NumberCard}),({@link AnimalCard} must supply a display symbol via {@link #getDisplaySymbol()}
- * and may override {@link #getScore()} to differentiate point values.</p>
+ * <p>Implements {@link Flippable}, {@link Scoreable}, and {@link Resetable}.
+ * Concrete subclasses ({@link AnimalCard}, {@link FruitCard}, {@link NumberCard},
+ * {@link AnimeCard}) supply the theme-specific symbol and score bonus.</p>
  */
 public abstract class BaseCard implements Flippable, Scoreable, Resetable {
 
@@ -50,12 +47,12 @@ public abstract class BaseCard implements Flippable, Scoreable, Resetable {
         this.matched = false;
     }
 
-    // ── Abstract contract ────────────────────────────────────────────────────
+
 
     /**
-     * Returns the visual symbol (emoji or text) displayed on the card face.
+     * Returns the visual symbol (emoji, text, or image path) displayed on the card face.
      *
-     * @return non-null display symbol string
+     * @return symbol string; if it starts with {@code "/images/"} it is an image resource path
      */
     public abstract String getDisplaySymbol();
 

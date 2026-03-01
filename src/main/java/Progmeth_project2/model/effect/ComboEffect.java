@@ -8,13 +8,6 @@ import javafx.util.Duration;
 
 /**
  * Visual effect that displays a floating combo-multiplier text label.
- *
- * <p>When played, a "COMBO ×N" label is added to the supplied parent pane and
- * animated upward while fading out, then removed automatically on completion.</p>
- *
- * <p>Because this effect creates its own {@link Label} node, the {@code target}
- * argument of {@link #createAnimation(Node)} is ignored; callers should use
- * {@link #play(Node)} with {@code null} or call {@link #playOnPane()} directly.</p>
  */
 public class ComboEffect extends BaseEffect {
 

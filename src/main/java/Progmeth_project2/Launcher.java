@@ -16,6 +16,9 @@ package Progmeth_project2;
  */
 public class Launcher {
 
+    /** Private utility-class constructor — not instantiated. */
+    private Launcher() {}
+
     /**
      * JVM entry point.  Delegates immediately to {@link Main#main(String[])}.
      *

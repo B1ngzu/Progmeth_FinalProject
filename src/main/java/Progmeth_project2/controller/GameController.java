@@ -67,12 +67,13 @@ public class GameController {
     /**
      * Creates a {@code GameController}.
      * Call {@link #start()} after the associated {@link GameScene} has been
-     * shown (i.e. after {@code gameScene.show()}) so that all HUD labels are
-     * guaranteed to be initialised before the first {@code updateHud()} call.
+     * shown so that all HUD labels are initialised before the first
+     * {@code updateHud()} call.
      *
      * @param stage      the application stage
      * @param gameState  the current game state
      * @param gameScene  the game view
+     * @param playerName the player's display name
      */
     public GameController(Stage stage, GameState gameState,
                           GameScene gameScene, String playerName) {

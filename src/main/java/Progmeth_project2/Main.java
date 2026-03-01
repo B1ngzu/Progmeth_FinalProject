@@ -16,6 +16,12 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
+    /**
+     * No-arg constructor required by the JavaFX framework to instantiate the
+     * {@link Application} subclass via reflection.
+     */
+    public Main() {}
+
     /** Application title shown in the window title bar. */
     private static final String APP_TITLE = "Memory Match — Card Game";
 

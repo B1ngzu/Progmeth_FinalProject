@@ -7,11 +7,6 @@ import javafx.util.Duration;
 
 /**
  * Visual effect played when two cards form a matching pair.
- *
- * <p>The animation runs a {@link ScaleTransition} (card scales up then back
- * down) in parallel with a {@link Timeline} that brightens the card using a
- * {@link ColorAdjust} effect and then returns to normal, producing a satisfying
- * "glow-pulse" result.</p>
  */
 public class MatchEffect extends BaseEffect {
 
@@ -26,9 +21,8 @@ public class MatchEffect extends BaseEffect {
 
     // ── Constructor ──────────────────────────────────────────────────────────
 
-    /**
-     * Creates a new {@code MatchEffect}.
-     */
+
+    /** Creates a {@code MatchEffect} with the standard total duration. */
     public MatchEffect() {
         this.duration = Duration.millis(TOTAL_DURATION_MS);
     }

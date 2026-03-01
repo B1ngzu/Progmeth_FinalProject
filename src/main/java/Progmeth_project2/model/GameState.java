@@ -274,39 +274,39 @@ public class GameState implements Resetable {
 
     // ── Accessors ────────────────────────────────────────────────────────────
 
-    /** @return the difficulty for this game session */
+    /** Returns the difficulty for this game session. @return difficulty */
     public Difficulty getDifficulty() { return difficulty; }
 
-    /** @return the card theme for this game session */
+    /** Returns the card theme for this game session. @return theme */
     public Theme getTheme() { return theme; }
 
-    /** @return the current shuffled card list ({@code List<BaseCard>}) */
+    /** Returns the current shuffled card list. @return list of {@code BaseCard} */
     public List<BaseCard> getCards() { return cards; }
 
-    /** @return the list of power-ups ({@code List<BasePowerUp>}) */
+    /** Returns the list of power-ups. @return list of {@code BasePowerUp} */
     public List<BasePowerUp> getPowerUps() { return powerUps; }
 
-    /** @return the current accumulated score */
+    /** Returns the current accumulated score. @return score */
     public int getScore() { return score; }
 
-    /** @return the current combo multiplier (consecutive matches) */
+    /** Returns the current combo multiplier (consecutive matches). @return combo count */
     public int getCombo() { return combo; }
 
-    /** @return the current level number (1-based) */
+    /** Returns the current level number (1-based). @return level */
     public int getLevel() { return level; }
 
-    /** @return seconds remaining on the countdown timer */
+    /** Returns seconds remaining on the countdown timer. @return seconds remaining */
     public int getTimeRemaining() { return timeRemaining; }
 
-    /** @return whether the timer is currently frozen */
+    /** Returns whether the timer is currently frozen. @return {@code true} if frozen */
     public boolean isTimerFrozen() { return timerFrozen; }
 
-    /** @return whether the Reveal power-up is currently active */
+    /** Returns whether the Reveal power-up is currently active. @return {@code true} if revealing */
     public boolean isRevealing() { return revealing; }
 
-    /** @return the number of pairs matched on the current level */
+    /** Returns the number of pairs matched on the current level. @return matches found */
     public int getMatchesFound() { return matchesFound; }
 
-    /** @return list of card IDs to highlight for the Hint power-up */
+    /** Returns an unmodifiable list of card IDs to highlight for the Hint power-up. @return hint card IDs */
     public List<String> getHintCardIds() { return Collections.unmodifiableList(hintCardIds); }
 }

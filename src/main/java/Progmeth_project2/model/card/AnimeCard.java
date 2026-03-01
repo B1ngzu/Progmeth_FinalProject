@@ -1,7 +1,8 @@
 package Progmeth_project2.model.card;
 
-public class AnimeCard extends BaseCard{
-    /** CSS style-class applied to the card face for the Animals theme. */
+/** A card whose face displays an anime character image loaded from the classpath. */
+public class AnimeCard extends BaseCard {
+
     private static final String STYLE_CLASS = "animal-card";
 
     /**
@@ -13,10 +14,10 @@ public class AnimeCard extends BaseCard{
     // ── Constructor ──────────────────────────────────────────────────────────
 
     /**
-     * Constructs an {@code AnimalCard} with the given identifiers.
+     * Constructs an {@code AnimeCard} with the given identifiers.
      *
-     * @param cardId      unique identifier for this card instance
-     * @param symbolKey   the animal emoji used as the pair key
+     * @param cardId    unique identifier for this card instance
+     * @param symbolKey classpath image path (e.g. {@code "/images/frieren.png"}) used as the pair key
      */
     public AnimeCard(String cardId, String symbolKey) {
         super(cardId, symbolKey);
@@ -25,7 +26,6 @@ public class AnimeCard extends BaseCard{
     // ── BaseCard contract ────────────────────────────────────────────────────
 
     /**
-     * {@inheritDoc}
      * Returns the animal emoji that identifies this card's pair.
      */
     @Override
@@ -34,7 +34,6 @@ public class AnimeCard extends BaseCard{
     }
 
     /**
-     * {@inheritDoc}
      * Returns the CSS style class for the Animals theme.
      */
     @Override
@@ -43,7 +42,6 @@ public class AnimeCard extends BaseCard{
     }
 
     /**
-     * {@inheritDoc}
      * Animal cards award the default score plus a small bonus.
      */
     @Override

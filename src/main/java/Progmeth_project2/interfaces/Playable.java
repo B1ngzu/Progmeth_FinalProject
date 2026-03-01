@@ -6,10 +6,6 @@ package Progmeth_project2.interfaces;
  */
 public interface Playable {
 
-    /**
-     * Play the audio associated with this element.
-     * Implementations must not block the calling thread; audio should
-     * be dispatched to a daemon thread internally.
-     */
+    /** Plays the audio cue associated with this element's activation. */
     void playSound();
 }

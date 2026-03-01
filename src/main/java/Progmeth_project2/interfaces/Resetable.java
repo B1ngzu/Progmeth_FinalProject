@@ -7,8 +7,6 @@ package Progmeth_project2.interfaces;
  */
 public interface Resetable {
 
-    /**
-     * Restore this element to its initial state.
-     */
+    /** Resets this element to its initial state. */
     void reset();
 }

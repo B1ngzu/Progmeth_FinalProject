@@ -9,18 +9,18 @@ import java.io.IOException;
 public interface Persistable {
 
     /**
-     * Persist the current state to the specified path.
+     * Serialises this element's state to the given file path.
      *
-     * @param path file-system path to write data to
-     * @throws IOException if the write operation fails
+     * @param path destination file path
+     * @throws IOException if writing fails
      */
     void save(String path) throws IOException;
 
     /**
-     * Load previously persisted state from the specified path.
+     * Deserialises this element's state from the given file path.
      *
-     * @param path file-system path to read data from
-     * @throws IOException if the read operation fails
+     * @param path source file path
+     * @throws IOException if reading fails
      */
     void load(String path) throws IOException;
 }

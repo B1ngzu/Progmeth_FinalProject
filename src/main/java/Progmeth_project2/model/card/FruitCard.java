@@ -2,11 +2,6 @@ package Progmeth_project2.model.card;
 
 /**
  * A card whose face displays a fruit emoji symbol.
- *
- * <p>Concrete subclass of {@link BaseCard}; demonstrates polymorphism by
- * overriding {@link #getDisplaySymbol()}, {@link #getThemeStyleClass()}, and
- * {@link #getScore()} while being stored in {@code List<BaseCard>}
- * collections.</p>
  */
 public class FruitCard extends BaseCard {
 
@@ -28,7 +23,6 @@ public class FruitCard extends BaseCard {
     // ── BaseCard contract ────────────────────────────────────────────────────
 
     /**
-     * {@inheritDoc}
      * Returns the fruit emoji that identifies this card's pair.
      */
     @Override
@@ -37,7 +31,6 @@ public class FruitCard extends BaseCard {
     }
 
     /**
-     * {@inheritDoc}
      * Returns the CSS style class for the Fruits theme.
      */
     @Override
@@ -46,7 +39,6 @@ public class FruitCard extends BaseCard {
     }
 
     /**
-     * {@inheritDoc}
      * Fruit cards award the base default score.
      */
     @Override

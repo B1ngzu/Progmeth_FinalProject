@@ -8,19 +8,6 @@ import javafx.util.Duration;
 
 /**
  * Visual effect that simulates flipping a card over.
- *
- * <p>The animation comprises two {@link ScaleTransition} stages applied to the
- * card's X axis:</p>
- * <ol>
- *   <li>Scale from 1.0 → 0.0 over {@value #HALF_DURATION_MS} ms (card face
- *       appears to fold away).</li>
- *   <li>A mid-point callback ({@link #onHalfway}) swaps the visible face.</li>
- *   <li>Scale from 0.0 → 1.0 over {@value #HALF_DURATION_MS} ms (new face
- *       appears to unfold).</li>
- * </ol>
- *
- * <p>This technique avoids the need for a full 3-D scene/camera setup while
- * still producing a convincing coin-flip illusion.</p>
  */
 public class FlipEffect extends BaseEffect {
 
@@ -46,7 +33,6 @@ public class FlipEffect extends BaseEffect {
     // ── BaseEffect contract ───────────────────────────────────────────────────
 
     /**
-     * {@inheritDoc}
      * Returns a {@link SequentialTransition} consisting of the two scale stages.
      */
     @Override

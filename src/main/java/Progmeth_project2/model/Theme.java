@@ -28,7 +28,7 @@ public enum Theme {
         "13", "14", "15", "16", "17", "18"
     }),
 
-    /** Anime theme -18 unique char. */
+    /** Anime character images — paths under {@code /images/} on the classpath. */
     ANIME("Anime", new String[]{
                 "/images/asuka-removebg-preview.png",
                 "/images/asuka-removebg-preview.png",
@@ -58,6 +58,10 @@ public enum Theme {
 
     // ── Constructor ──────────────────────────────────────────────────────────
 
+    /**
+     * @param displayName human-readable label shown in the UI
+     * @param symbols     ordered array of symbol strings for this theme
+     */
     Theme(String displayName, String[] symbols) {
         this.displayName = displayName;
         this.symbols = symbols;

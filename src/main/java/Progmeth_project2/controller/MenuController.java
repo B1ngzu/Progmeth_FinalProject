@@ -16,11 +16,11 @@ import javafx.stage.Stage;
  */
 public class MenuController {
 
-    // ── Fields ────────────────────────────────────────────────────────────────
+
 
     private final Stage stage;
 
-    // ── Constructor ──────────────────────────────────────────────────────────
+
 
     /**
      * Creates a {@code MenuController} bound to the given stage.
@@ -31,12 +31,9 @@ public class MenuController {
         this.stage = stage;
     }
 
-    // ── Navigation ────────────────────────────────────────────────────────────
 
-    /**
-     * Shows the main-menu scene.
-     * This is also called when the player navigates back from the game.
-     */
+
+    /** Shows the main-menu scene. */
     public void showMenu() {
         MainMenuScene menu = new MainMenuScene(stage, this);
         menu.show();
@@ -57,8 +54,6 @@ public class MenuController {
         GameScene gameScene = new GameScene(stage, state);
         GameController gameCtrl = new GameController(stage, state, gameScene, name);
         gameScene.setController(gameCtrl);
-        // show() must run before start() so that setupLayout() initialises all
-        // HUD Label fields before GameController.start() calls updateHud().
         gameScene.show();
         gameCtrl.start();
     }
@@ -66,26 +61,20 @@ public class MenuController {
 
 
 
-    /**
-     * Called when the player clicks "Settings".
-     */
+    /** Called when the player clicks "Settings". Navigates to the settings scene. */
     public void onSettings() {
         SettingsScene settings = new SettingsScene(stage, this);
         settings.show();
     }
 
-    /**
-     * Called when the player clicks "Back" in any scene that delegates back to
 
-     */
+    /** Called when the player clicks "Back" in any scene that delegates back to the menu. */
     public void onBack() {
         showMenu();
     }
 
-    /**
-     * Called when the player clicks "Exit".
-     * Exits the JavaFX platform cleanly.
-     */
+
+    /** Called when the player clicks "Exit". Terminates the JavaFX application. */
     public void onExit() {
         Platform.exit();
     }

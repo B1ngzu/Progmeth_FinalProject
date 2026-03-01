@@ -1,9 +1,9 @@
 package Progmeth_project2.model.card;
 
 
+/** A card whose face displays an animal emoji symbol. */
 public class AnimalCard extends BaseCard {
 
-    /** CSS style-class applied to the card face for the Animals theme. */
     private static final String STYLE_CLASS = "animal-card";
 
     /**

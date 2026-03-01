@@ -13,11 +13,16 @@ import java.util.concurrent.Executors;
  */
 public class SoundManager {
 
-    // Field
+    // ── Constants ────────────────────────────────────────────────────────────
 
+    /** PCM sample rate used for all synthesised tones. */
     private static final int SAMPLE_RATE = 44100;
+
+    // ── Singleton ─────────────────────────────────────────────────────────────
+
     private static SoundManager instance;
 
+    /** Daemon thread pool used to play sounds off the FX thread. */
     private final ExecutorService executor =
             Executors.newCachedThreadPool(r -> {
                 Thread t = new Thread(r, "SoundManager");
@@ -25,18 +30,31 @@ public class SoundManager {
                 return t;
             });
 
-        // SFX
+    // ── SFX state ─────────────────────────────────────────────────────────────
+
+    /** Whether all sound effects are silenced. */
     private boolean muted     = false;
+
+    /** Master volume for synthesised sound effects (0.0–1.0). */
     private float   sfxVolume = 0.5f;
 
-        // BGM
+    // ── BGM state ─────────────────────────────────────────────────────────────
+
+    /** The currently open background music clip, or {@code null} if not loaded. */
     private Clip    bgClip    = null;
+
+    /** Whether background music is currently active (prevents double-start). */
     private volatile boolean bgPlaying = false;
+
+    /** Whether background music is silenced independently of SFX. */
     private boolean bgMuted   = false;
+
+    /** Master volume for background music (0.0–1.0). */
     private float   bgVolume  = 0.5f;
 
     // ── Constructor ──────────────────────────────────────────────────────────
 
+    /** Private constructor — use {@link #getInstance()}. */
     private SoundManager() {}
 
     // ── Singleton accessor ────────────────────────────────────────────────────
@@ -289,7 +307,14 @@ public class SoundManager {
     /**
      * Waveform shapes available for tone synthesis.
      */
-    public enum Waveform { SINE, SQUARE, SAWTOOTH }
+    public enum Waveform {
+        /** Smooth sinusoidal wave — soft tone. */
+        SINE,
+        /** Hard on/off square wave — bright tone. */
+        SQUARE,
+        /** Linearly rising sawtooth wave — buzzy tone. */
+        SAWTOOTH
+    }
 
     /**
      * Synthesises and immediately plays a single tone.
@@ -340,6 +365,7 @@ public class SoundManager {
         return data;
     }
 
+    /** Sleeps the current thread for {@code ms} milliseconds, ignoring interrupts. */
     private void sleep(long ms) {
         try { Thread.sleep(ms); } catch (InterruptedException ignored) {}
     }
